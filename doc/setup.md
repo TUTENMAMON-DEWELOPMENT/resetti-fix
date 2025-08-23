@@ -141,5 +141,5 @@ running `resetti PROFILE_NAME`. Refer to the [usage document](https://github.com
 for more information on how to use resetti once you've started it.
 
 If you encounter any issues or think this documentation could be improved, feel
-free to join the [Discord](https://discord.gg/fwZA2VJh7k) or open an issue.
+free to join the [Discord](https://discord.com/invite/3tm4UpUQ8t) or open an issue.
 Happy resetting!

@@ -1,4 +1,4 @@
-# resetti [![Discord](https://img.shields.io/discord/1095808506239651942?style=flat-square)](https://discord.gg/fwZA2VJh7k)
+# resetti [![Discord](https://img.shields.io/discord/1095808506239651942?style=flat-square)](https://discord.com/invite/3tm4UpUQ8t)
 
 resetti is a Linux-compatible reset macro for Minecraft speedruns. It supports
 a variety of different resetting styles, categories, and Minecraft versions.
@@ -27,7 +27,7 @@ makepkg -si
 
 Check the [Releases](https://github.com/tesselslate/resetti/releases) tab for
 distro-specific packages (deb or rpm) or download the latest development builds from the
-[Discord](https://discord.gg/fwZA2VJh7k).
+[Discord](https://discord.com/invite/3tm4UpUQ8t).
 
 ### From source
 
@@ -63,7 +63,7 @@ is not guaranteed to work.
 
 ## Contributing
 
-Contributions are welcome. Join the [Discord](https://discord.gg/fwZA2VJh7k) or
+Contributions are welcome. Join the [Discord](https://discord.com/invite/3tm4UpUQ8t) or
 open an issue to discuss the changes you'd like to make.
 - Please use proper English for documentation and code comments.
 - Ensure that code changes are properly formatted with `go fmt ./...`.
