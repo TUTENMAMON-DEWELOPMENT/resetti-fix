@@ -18,8 +18,8 @@ import (
 // An instance contains all of the relevant information for an instance, such
 // as its game directory and current state.
 type instance struct {
-	info   InstanceInfo
-	altRes bool
+	info      InstanceInfo
+	activeRes int // -1 = normal, >=0 = index into AltRes
 }
 
 // A Manager controls several Minecraft instances. It keeps track of each
@@ -39,13 +39,13 @@ type Manager struct {
 // NewManager attempts to create a new Manager for the given instances.
 func NewManager(info InstanceInfo, conf *cfg.Profile, x *x11.Client) (*Manager, error) {
 	// Create instance.
-	instance := instance{info, false}
+	instance := instance{info: info, activeRes: -1}
 
 	m := Manager{
-		sync.Mutex{},
-		instance,
-		conf,
-		x,
+		mu:       sync.Mutex{},
+		instance: instance,
+		conf:     conf,
+		x:        x,
 	}
 	x.Click(info.Wid)
 
@@ -81,16 +81,20 @@ func (m *Manager) Focus() {
 
 // ToggleResolution switches the given instance between the normal (play)
 // resolution and the given alternate resolution. It returns whether or not
-// the instance is now using the alternate resolution.
+// the instance is now using an alternate resolution.
 func (m *Manager) ToggleResolution(resId int) bool {
-	if m.instance.altRes {
+	// If already in this exact alt resolution, toggle back to normal
+	if m.instance.activeRes == resId {
 		m.setResolution(m.conf.NormalRes)
+		m.instance.activeRes = -1
 	} else {
+		// Switch from normal OR another alt to this one
 		m.setResolution(&m.conf.AltRes[resId])
+		m.instance.activeRes = resId
 	}
-	m.instance.altRes = !m.instance.altRes
+
 	m.Focus()
-	return m.instance.altRes
+	return m.instance.activeRes != -1
 }
 
 // Reset attempts to reset the given instance. The return value will indicate
@@ -104,10 +108,13 @@ func (m *Manager) Reset() bool {
 	// Ghost pie fix.
 	m.sendKeyUp(x11.KeyShift)
 	m.sendKeyPress(x11.KeyF3)
-	if m.instance.altRes {
+
+	// Always restore normal resolution before reset
+	if m.instance.activeRes != -1 {
 		m.setResolution(m.conf.NormalRes)
-		m.instance.altRes = false
+		m.instance.activeRes = -1
 	}
+
 	m.sendKeyPress(m.instance.info.ResetKey)
 	return true
 }
@@ -132,3 +139,4 @@ func (m *Manager) setResolution(rect *cfg.Rectangle) {
 		rect.X, rect.Y, rect.W, rect.H,
 	)
 }
+
